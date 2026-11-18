@@ -8,7 +8,7 @@ Giáo trình nhắc đến CUTOFF = 7 (cũ) và 10 (mới). Thí nghiệm này �
 
 ## Cấu hình thí nghiệm
 
-- **Ngôn ngữ**: Java 25 (JDK thuần, không dùng thư viện algs4).
+- **Ngôn ngữ**: Java 25.
 - **Máy đo**: Laptop ASUS Vivobook 16X K3605VC, Intel Core i5-13420H (4 P-core + 4 E-core, 12 luồng), 16 GB RAM, Windows 11 Home.
 - **Quy ước đo**: ghim affinity vào 4 P-core, heap cố định `-Xms2g -Xmx2g -XX:+AlwaysPreTouch`, khởi động JIT trước khi đo, mỗi cấu hình lặp >= 30 lần, báo trung vị + độ lệch chuẩn + CI 95%.
 - **Biến khảo sát**:
@@ -45,10 +45,9 @@ mergesort-cutoff/
 │   ├── raw/                    # CSV thô từng lần chạy
 │   ├── summary/                # CSV tổng hợp
 │   └── plots/                  # PNG đồ thị
-├── report/
-│   └── report.md               # báo cáo
-└── docs/
-    └── ai-usage.md             # ghi chú AI làm gì, SV làm gì
+└── report/
+    └── report.md               # báo cáo
+
 ```
 
 ## Cách chạy lại (tóm tắt)
