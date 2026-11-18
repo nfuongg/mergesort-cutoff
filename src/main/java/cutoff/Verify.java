@@ -2,9 +2,6 @@ package cutoff;
 
 import java.util.Arrays;
 
-/**
- * Kiem tra ket qua sap xep: (1) khong giam, (2) la hoan vi cua input (so multiset qua checksum).
- */
 public final class Verify {
     private Verify() {}
 
@@ -24,9 +21,8 @@ public final class Verify {
         }
     }
 
-    // Checksum don gian theo tong hashCode -- khong manh ve ly thuyet nhung du phat hien bug thuong gap
     public static long checksum(Comparable[] a) {
-        long h = 1469598103934665603L; // FNV offset
+        long h = 1469598103934665603L;
         for (Comparable x : a) h = h * 1099511628211L + x.hashCode();
         return h;
     }

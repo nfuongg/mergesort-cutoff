@@ -1,4 +1,4 @@
-# build.ps1 - biên dịch toàn bộ Java source
+
 $ErrorActionPreference = "Stop"
 New-Item -ItemType Directory -Force -Path "build" | Out-Null
 $sources = Get-ChildItem -Path "src\main\java" -Filter "*.java" -Recurse | ForEach-Object { $_.FullName }

@@ -1,12 +1,8 @@
 package cutoff;
 
-// Mergesort — merge(): slide "Merging: Java implementation" (tr.7)
-//             sort():  slide "Mergesort: practical improvements" — cutoff to insertion sort (tr.18)
 public class Merge
 {
-    // Slide dùng hằng CUTOFF. Để làm thí nghiệm, CUTOFF để dạng biến (mặc định 10 theo slide).
-    // Yêu cầu CUTOFF >= 1 (CUTOFF = 1 tương đương mergesort gốc, không cutoff).
-    // public để Harness set lại qua reflection trước mỗi run.
+
     public static int CUTOFF = 10;
 
     private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi)

@@ -10,22 +10,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Khung do thoi gian mergesort voi cac gia tri CUTOFF khac nhau.
- *
- * CLI:
- *   --type Comparable|int
- *   --N 1000,10000,...
- *   --cutoff 1,2,3,...
- *   --dist random,sorted,reverse,nearly,duplicates
- *   --reps 30
- *   --warmup 5
- *   --seed 42
- *   --out results/raw/xxx.csv
- *
- * CSV: type,N,dist,cutoff,rep,nanos,checksum
- * Ghi tung lan lap => phan tich o Python co du du lieu de tinh trung vi/CI.
- */
 public class Harness {
 
     public static void main(String[] args) throws Exception {
@@ -51,18 +35,14 @@ public class Harness {
             }
         }
 
-        // Kiem tra class sinh vien da co chua
         requireClass(type);
 
-        // Mo file ghi
         new java.io.File(outPath).getParentFile().mkdirs();
         try (BufferedWriter w = new BufferedWriter(new FileWriter(outPath))) {
             w.write("type,N,dist,cutoff,rep,nanos,checksum\n");
 
-            // --- Warmup chung: chay mergesort voi CUTOFF=7 tren N nho de nong JIT ---
             warmupJIT(type, warmup, seed);
 
-            // --- Xay danh sach cong viec, xao tron de tranh sai lech do nhiet/turbo ---
             List<Job> jobs = new ArrayList<>();
             for (int N : Ns) {
                 for (String dist : dists) {
@@ -113,7 +93,7 @@ public class Harness {
         if (type.equalsIgnoreCase("Comparable")) {
             setCutoff("cutoff.Merge", cutoff);
             Integer[] base = DataGen.gen(dist, N, seed);
-            Integer[] a = base.clone(); // clone NGOAI vung do
+            Integer[] a = base.clone();
             long t1 = System.nanoTime();
             Merge.sort(a);
             long t2 = System.nanoTime();

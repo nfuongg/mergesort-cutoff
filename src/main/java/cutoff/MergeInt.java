@@ -1,9 +1,8 @@
 package cutoff;
 
-// Bản int của Merge.java
 public class MergeInt
 {
-    // public để Harness set lại qua reflection trước mỗi run.
+
     public static int CUTOFF = 10;
 
     private static void merge(int[] a, int[] aux, int lo, int mid, int hi)

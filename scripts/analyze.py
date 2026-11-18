@@ -23,14 +23,12 @@ PLOT_DIR = "results/plots"
 os.makedirs(SUM_DIR, exist_ok=True)
 os.makedirs(PLOT_DIR, exist_ok=True)
 
-
 def load_all():
     files = glob.glob(os.path.join(RAW_DIR, "*.csv"))
     if not files:
         raise SystemExit(f"Khong co file CSV nao trong {RAW_DIR}")
     dfs = [pd.read_csv(f) for f in files]
     return pd.concat(dfs, ignore_index=True)
-
 
 def summarize(df):
     g = df.groupby(["type", "N", "dist", "cutoff"])["nanos"]
@@ -42,10 +40,9 @@ def summarize(df):
         p25=lambda s: s.quantile(0.25),
         p75=lambda s: s.quantile(0.75),
     ).reset_index()
-    # Khoang tin cay 95% cho trung binh (xap xi t-student ~ 1.96 voi n lon)
+
     summary["ci95"] = 1.96 * summary["std"] / np.sqrt(summary["n"])
     return summary
-
 
 def plot_time_vs_cutoff(summary):
     for (typ, dist), sub in summary.groupby(["type", "dist"]):
@@ -67,7 +64,6 @@ def plot_time_vs_cutoff(summary):
         fig.savefig(out, dpi=140)
         plt.close(fig)
         print("saved", out)
-
 
 def plot_normalized(summary, ref_cutoff=7):
     for (typ, dist), sub in summary.groupby(["type", "dist"]):
@@ -94,7 +90,6 @@ def plot_normalized(summary, ref_cutoff=7):
         plt.close(fig)
         print("saved", out)
 
-
 def best_cutoff_table(summary):
     """Voi moi (type, N, dist): CUTOFF cho trung vi be nhat."""
     idx = summary.groupby(["type", "N", "dist"])["median"].idxmin()
@@ -104,7 +99,6 @@ def best_cutoff_table(summary):
     print("\n=== CUTOFF toi uu theo (type, N, dist) ===")
     print(best.to_string(index=False))
     return best
-
 
 def main():
     df = load_all()
@@ -116,7 +110,6 @@ def main():
     plot_normalized(summary, ref_cutoff=7)
     plot_normalized(summary, ref_cutoff=10)
     best_cutoff_table(summary)
-
 
 if __name__ == "__main__":
     main()

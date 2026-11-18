@@ -1,4 +1,4 @@
-# run_pilot.ps1 - pilot: dai CUTOFF rong, N trung binh, de chot dai chay full
+
 $ErrorActionPreference = "Stop"
 New-Item -ItemType Directory -Force -Path "results\raw" | Out-Null
 

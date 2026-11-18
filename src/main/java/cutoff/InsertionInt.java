@@ -1,6 +1,5 @@
 package cutoff;
 
-// Bản int của Insertion.java: less(v, w) -> v < w
 public class InsertionInt
 {
     public static void sort(int[] a)

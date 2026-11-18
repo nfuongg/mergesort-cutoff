@@ -1,8 +1,5 @@
 package cutoff;
 
-// Insertion sort — theo slide "Stability: insertion sort" (22Mergesort, tr.52).
-// less()/exch(): theo slide "insertion sort using a Comparator" (tr.46), đổi Comparator -> Comparable.
-// sort(a, lo, hi): bản sắp xếp đoạn [lo..hi] mà slide 18 gọi tới (Insertion.sort(a, lo, hi)).
 public class Insertion
 {
     public static void sort(Comparable[] a)

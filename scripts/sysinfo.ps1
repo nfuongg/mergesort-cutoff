@@ -1,5 +1,3 @@
-# sysinfo.ps1 - thu thập cấu hình máy, ghi vào results/sysinfo.txt
-# Chạy: powershell -ExecutionPolicy Bypass -File scripts\sysinfo.ps1
 
 $ErrorActionPreference = "Continue"
 $out = "results\sysinfo.txt"
@@ -32,17 +30,18 @@ Section "Power plan"
 powercfg /GETACTIVESCHEME | Out-File -FilePath $out -Append -Encoding utf8
 
 Section "Java"
-java -version 2>&1 | Out-File -FilePath $out -Append -Encoding utf8
-javac -version 2>&1 | Out-File -FilePath $out -Append -Encoding utf8
+(java -version 2>&1) | Out-String | Out-File -FilePath $out -Append -Encoding utf8
+(javac -version 2>&1) | Out-String | Out-File -FilePath $out -Append -Encoding utf8
 
-Section "Checklist khi đo"
+Section "Measurement checklist"
 @"
-[ ] Cắm sạc
-[ ] Power plan = High performance hoặc Best performance
-[ ] Đóng trình duyệt, IDE, ứng dụng nền
-[ ] Tạm tắt Windows Defender real-time (nếu đồng ý)
-[ ] Không bật Turbo biến thiên bất thường (xem Maximum processor state)
-[ ] Nhiệt độ CPU khởi đầu < 60 degC (nếu có cảm biến)
+[ ] Laptop plugged in
+[ ] Power plan = High performance (powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c)
+[ ] Browser / IDE / background apps closed
+[ ] Windows Defender real-time scan paused (optional)
+[ ] Processor power management: Maximum state as desired (Turbo on/off noted)
+[ ] CPU temperature < 60 C at start (if sensor available)
+[ ] Java pinned to P-cores via: start /b /affinity FF /wait java ...
 "@ | Out-File -FilePath $out -Append -Encoding utf8
 
-Write-Host "Da ghi: $out"
+Write-Host "Written: $out" -ForegroundColor Green
