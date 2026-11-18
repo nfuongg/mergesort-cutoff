@@ -25,10 +25,10 @@ mergesort-cutoff/
 ├── .gitignore
 ├── LICENSE
 ├── src/main/java/cutoff/
-│   ├── Merge.java              # SV viết: mergesort Comparable[] có CUTOFF
-│   ├── Insertion.java          # SV viết: insertion sort trên [lo, hi]
-│   ├── MergeInt.java           # SV viết: mergesort int[] có CUTOFF
-│   ├── InsertionInt.java       # SV viết: insertion sort int[] trên [lo, hi]
+│   ├── Merge.java              # mergesort Comparable[] có CUTOFF
+│   ├── Insertion.java          # insertion sort trên [lo, hi]
+│   ├── MergeInt.java           # mergesort int[] có CUTOFF
+│   ├── InsertionInt.java       # insertion sort int[] trên [lo, hi]
 │   ├── DataGen.java            # sinh dữ liệu theo seed, nhiều phân bố
 │   ├── Verify.java             # kiểm sắp xếp + so sánh multiset
 │   └── Harness.java            # khung đo thời gian, in CSV
@@ -70,4 +70,7 @@ powershell -File scripts\run_full.ps1
 python scripts\analyze.py
 ```
 
-Chi tiết các thí nghiệm, cấu hình đo và kết quả xem trong `report/report.md`.
+## Kết quả
+
+Báo cáo đầy đủ: [report/report.md](report/report.md)
+Đồ thị tổng hợp: [results/plots/headline.png](results/plots/headline.png)
