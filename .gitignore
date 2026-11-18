@@ -1,0 +1,33 @@
+# Java build
+*.class
+build/
+out/
+bin/
+target/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Thí nghiệm - dữ liệu lớn (regen bằng DataGen + seed)
+data/
+results/raw/
+
+# Log tạm
+*.log
+tmp/

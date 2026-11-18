@@ -1,0 +1,54 @@
+﻿Mergesort CUTOFF experiment - system info
+Collected: 2026-11-18 22:44:26 +07:00
+
+=== OS ===
+
+
+Caption        : Microsoft Windows 11 Home Single Language
+Version        : 10.0.26200
+BuildNumber    : 26200
+OSArchitecture : 64-bit
+LastBootUpTime : 11/18/2026 10:26:35 PM
+
+
+
+
+=== CPU ===
+
+
+Name                      : 13th Gen Intel(R) Core(TM) i5-13420H
+Manufacturer              : GenuineIntel
+NumberOfCores             : 8
+NumberOfLogicalProcessors : 12
+MaxClockSpeed             : 2100
+L2CacheSize               : 7168
+L3CacheSize               : 12288
+
+
+
+
+=== Memory ===
+TotalPhysicalMemory: 15.66 GB
+
+=== Power plan ===
+Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Cân dô'i)
+
+=== Java ===
+java : java version "25.0.2" 2026-01-20 LTS
+At C:\Users\Phuong\mergesort-cutoff\scripts\sysinfo.ps1:35 char:1
++ java -version 2>&1 | Out-File -FilePath $out -Append -Encoding utf8
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (java version "25.0.2" 2026-01-20 LTS:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Java(TM) SE Runtime Environment (build 25.0.2+10-LTS-69)
+Java HotSpot(TM) 64-Bit Server VM (build 25.0.2+10-LTS-69, mixed mode, sharing)
+javac 25.0.2
+
+=== Checklist khi Ä‘o ===
+[ ] Cáº¯m sáº¡c
+[ ] Power plan = High performance hoáº·c Best performance
+[ ] ÄÃ³ng trÃ¬nh duyá»‡t, IDE, á»©ng dá»¥ng ná»n
+[ ] Táº¡m táº¯t Windows Defender real-time (náº¿u Ä‘á»“ng Ã½)
+[ ] KhÃ´ng báº­t Turbo biáº¿n thiÃªn báº¥t thÆ°á»ng (xem Maximum processor state)
+[ ] Nhiá»‡t Ä‘á»™ CPU khá»Ÿi Ä‘áº§u < 60 degC (náº¿u cÃ³ cáº£m biáº¿n)
