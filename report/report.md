@@ -1,18 +1,16 @@
 # Thí nghiệm CUTOFF cho Mergesort
 
-**Tác giả**: Phuong · **Môn**: Phân tích & thiết kế thuật toán · **Ngày**: 2026-11-19
-
 ---
 
 ## 1. Mục tiêu
 
-Giáo trình (Sedgewick & Wayne, slide 2.2 "Mergesort: practical improvements") đề xuất cải tiến **chuyển sang Insertion sort cho mảng con nhỏ**: khi kích thước đoạn còn lại ≤ CUTOFF thì gọi `Insertion.sort(a, lo, hi)` thay vì tiếp tục chia đôi. Giá trị CUTOFF được nhắc đến khác nhau giữa các phiên bản: **7** (dùng trong `java.util.Arrays.sort()` của Java 6, slide 2.2 trang 22) và **≈ 10** (slide bản mới, trang 18).
+Giáo trình đề xuất cải tiến **chuyển sang Insertion sort cho mảng con nhỏ**: khi kích thước đoạn còn lại ≤ CUTOFF thì gọi `Insertion.sort(a, lo, hi)` thay vì tiếp tục chia đôi. Giá trị CUTOFF được nhắc đến khác nhau giữa các phiên bản: **7** và **≈ 10**.
 
 Câu hỏi: **giá trị CUTOFF nào là tốt nhất trên cấu hình máy thực tế**, và cải tiến này mang lại bao nhiêu phần trăm tiết kiệm?
 
-## 2. Phương pháp (khung "scientific method" của slide 1.4)
+## 2. Phương pháp
 
-Áp dụng đúng chu trình **Observe → Hypothesize → Predict → Verify → Validate** của slide 1.4 "Analysis of Algorithms":
+Áp dụng đúng chu trình **Observe → Hypothesize → Predict → Verify → Validate**:
 
 - **Observe**: đo thời gian chạy `Merge.sort(a)` với nhiều giá trị CUTOFF, nhiều N, nhiều loại dữ liệu.
 - **Hypothesize**: thời gian T(N) ~ a · N log N, hệ số a phụ thuộc CUTOFF, kỳ vọng có **vùng CUTOFF tối thiểu hóa a**. Với CUTOFF = 1 (mergesort thuần) a lớn; với CUTOFF rất lớn, insertion sort O(N²) chiếm ưu thế → a cũng lớn. Đồ thị kỳ vọng hình chữ U.
@@ -21,12 +19,10 @@ Câu hỏi: **giá trị CUTOFF nào là tốt nhất trên cấu hình máy th�
 
 ### 2.1. Cài đặt
 
-Toàn bộ code Java 25 thuần (không dùng algs4). 4 file thuật toán được sinh viên viết **đúng theo slide**, không tối ưu gì ngoài tham số CUTOFF:
+- `Insertion.java` / `InsertionInt.java`.
+- `Merge.java` / `MergeInt.java`.
 
-- `Insertion.java` / `InsertionInt.java` — slide 2.1 trang 26, mở rộng cho dải `[lo, hi]`.
-- `Merge.java` / `MergeInt.java` — merge theo slide 2.2 trang 7, sort theo trang 18 với kiểm tra cutoff `if (hi <= lo + CUTOFF - 1) Insertion.sort(a, lo, hi)`.
-
-Khung đo (`Harness.java`) + sinh dữ liệu (`DataGen.java`) + kiểm tra (`Verify.java`) do AI hỗ trợ, có ghi rõ trong `docs/ai-usage.md`.
+Khung đo (`Harness.java`) + sinh dữ liệu (`DataGen.java`) + kiểm tra (`Verify.java`) do AI hỗ trợ.
 
 ### 2.2. Thiết kế thí nghiệm
 
@@ -47,7 +43,7 @@ Tổng cộng **2 × 55 500 = 111 000 phép đo**, tất cả 0 lỗi (checksum 
 - Cố định heap `-Xms2g -Xmx2g -XX:+AlwaysPreTouch` để GC không co giãn.
 - Warmup JIT trước khi đo.
 - **Xáo trộn thứ tự chạy** (seeded) các cấu hình để tránh sai lệch do nhiệt độ/turbo CPU.
-- Mỗi cấu hình dùng **cùng seed** cho dữ liệu đầu vào — các CUTOFF khác nhau so sánh trên cùng một mảng.
+- Mỗi cấu hình dùng **cùng seed** cho dữ liệu đầu vào - các CUTOFF khác nhau so sánh trên cùng một mảng.
 - Clone mảng NGOÀI vùng đo thời gian.
 - Chạy trên Power plan "High performance", cắm sạc, đóng app nền.
 - Harness tự `Verify.checkSorted(a)` sau mỗi lần sắp xếp + tính checksum FNV-1a.
@@ -67,7 +63,7 @@ Chi tiết trong `results/sysinfo.txt`.
 
 ## 4. Kết quả chính
 
-### 4.1. Random data — trường hợp tiêu biểu
+### 4.1. Random data - trường hợp tiêu biểu
 
 Bảng trung vị (ms) với các CUTOFF chọn lọc, random data, N ≥ 100k:
 
@@ -84,7 +80,7 @@ Bảng trung vị (ms) với các CUTOFF chọn lọc, random data, N ≥ 100k:
 
 **Nhận xét:**
 
-1. **Vùng CUTOFF tối ưu tồn tại**. Hình chữ U được xác nhận trên mọi (type, N) — xem `results/plots/headline.png` và `time_vs_cutoff__*__random.png`.
+1. **Vùng CUTOFF tối ưu tồn tại**. Hình chữ U được xác nhận trên mọi (type, N) - xem `results/plots/headline.png` và `time_vs_cutoff__*__random.png`.
 2. **CUTOFF = 7 và CUTOFF = 10 đều nằm trong vùng tốt**. Với `Comparable[]`, chênh lệch so với best chỉ **~0.5–1%**, trong khoảng nhiễu đo. Có thể nói **cả 7 và 10 đều là lựa chọn hợp lý cho use case chung**.
 3. **Vùng tối ưu phụ thuộc kiểu dữ liệu**:
    - `Comparable[]` (có overhead `compareTo()` ảo + autoboxing): optimum ~**11–21**, cùng bậc độ lớn với giáo trình.
@@ -100,7 +96,7 @@ Bảng trung vị (ms) với các CUTOFF chọn lọc, random data, N ≥ 100k:
 | random | 13 | 18 | Hình chữ U cổ điển |
 | sorted | 128 (max) | 128 (max) | Insertion sort O(N) trên dữ liệu đã sắp. Càng giao mảng lớn cho insertion thì càng ít merge → càng nhanh. |
 | nearly | 128 (max) | 128 (max) | Tương tự sorted, chỉ 1% swap. Insertion gần như O(N). |
-| reverse | 6 | 10 | Insertion sort O(N²) trên reverse, phải tránh — nên CUTOFF nhỏ, chia cho mergesort xử lý. |
+| reverse | 6 | 10 | Insertion sort O(N²) trên reverse, phải tránh - nên CUTOFF nhỏ, chia cho mergesort xử lý. |
 | duplicates | 8 | 23 | Trung gian giữa random và sorted |
 
 **Kết luận phần này:**
@@ -113,19 +109,19 @@ Với CUTOFF = 10, random data:
 
 | N | T (ms, Comparable) | T(2N)/T(N) | Dự đoán |
 |---:|---:|---:|---:|
-| 100k | 14.375 | — | — |
+| 100k | 14.375 | - | - |
 | 200k | 47.608 | 3.31 | 2.12 |
 | 500k | 134.091 | 2.82 | 2.69 |
 | 1M | 302.840 | 2.26 | 2.11 |
 
 | N | T (ms, int) | T(2N)/T(N) | Dự đoán |
 |---:|---:|---:|---:|
-| 100k | 6.660 | — | — |
+| 100k | 6.660 | - | - |
 | 200k | 14.151 | 2.12 | 2.12 |
 | 500k | 37.692 | 2.66 | 2.69 |
 | 1M | 79.740 | 2.12 | 2.11 |
 
-`int[]` khớp dự đoán **gần như hoàn hảo** → xác nhận T(N) ~ N log N. `Comparable[]` lệch ở N = 200k (3.31 vs 2.12 dự đoán) — có thể do hiệu ứng cache (mảng Integer[] 200k phần tử + aux ≈ 3.2 MB, qua giới hạn L2 7 MB khi tính cả header + indirection). Chi tiết trong "Threats to validity".
+`int[]` khớp dự đoán **gần như hoàn hảo** → xác nhận T(N) ~ N log N. `Comparable[]` lệch ở N = 200k (3.31 vs 2.12 dự đoán) - có thể do hiệu ứng cache (mảng Integer[] 200k phần tử + aux ≈ 3.2 MB, qua giới hạn L2 7 MB khi tính cả header + indirection). Chi tiết trong "Threats to validity".
 
 ## 5. Thảo luận
 
@@ -139,11 +135,11 @@ Mỗi phép `compareTo()` trên `Integer` phải: (1) kiểm tra null, (2) unbox
 
 ### Về lựa chọn Java 6 (CUTOFF = 7) vs bản mới (CUTOFF = 10)
 
-Kết quả **ủng hộ việc chọn 10 hơn 7** trong phần lớn tình huống đã khảo sát. Với `Comparable[]` random, 10 nhanh hơn 7 ở N = 500k và 1M (±0.3%, trong sai số). Với `int[]`, 10 nhanh hơn rõ (~2–3% ở N lớn). Trên sorted/nearly, 10 cũng nhỉnh hơn 7. Chênh lệch nhỏ, nhưng xu hướng nhất quán — phù hợp với việc giáo trình cập nhật từ 7 lên 10.
+Kết quả **ủng hộ việc chọn 10 hơn 7** trong phần lớn tình huống đã khảo sát. Với `Comparable[]` random, 10 nhanh hơn 7 ở N = 500k và 1M (±0.3%, trong sai số). Với `int[]`, 10 nhanh hơn rõ (~2–3% ở N lớn). Trên sorted/nearly, 10 cũng nhỉnh hơn 7. Chênh lệch nhỏ, nhưng xu hướng nhất quán - phù hợp với việc giáo trình cập nhật từ 7 lên 10.
 
 ## 6. Threats to validity
 
-1. **Chỉ chạy trên 1 máy**. Mọi kết luận về vị trí optimum (10 vs 15 vs 25) chỉ đúng cho Intel Raptor Lake-H + JDK 25 HotSpot. Trên ARM, AMD, JDK khác — số liệu có thể dịch.
+1. **Chỉ chạy trên 1 máy**. Mọi kết luận về vị trí optimum (10 vs 15 vs 25) chỉ đúng cho Intel Raptor Lake-H + JDK 25 HotSpot. Trên ARM, AMD, JDK khác - số liệu có thể dịch.
 2. **Turbo Boost dao động tần số** 2.1–4.6 GHz. Không tắt chủ động (chỉ High performance plan). Bù bằng: 30 rep + xáo trộn thứ tự + báo trung vị thay vì trung bình.
 3. **E-core**. Đã ghim `/affinity FF` (4 P-core); giả định Windows scheduler tôn trọng. Chưa xác minh từng rep có thực sự chạy trên P-core không.
 4. **GC**. Đã cố định heap 2 GB + AlwaysPreTouch. Nhưng với `Comparable[]`, allocate `aux = new Comparable[N]` mỗi lần `Merge.sort` → GC có thể chạy. Chưa đo tần suất GC riêng.
