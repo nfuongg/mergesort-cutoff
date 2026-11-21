@@ -1,5 +1,7 @@
 package cutoff;
 
+// Ban int[] cua Merge.java (so sanh truc tiep bang <).
+// Thuat toan giong het Merge.java, chi khac kieu phan tu.
 public class MergeInt
 {
     public static int CUTOFF = 10;

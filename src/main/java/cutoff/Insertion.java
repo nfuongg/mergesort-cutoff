@@ -1,5 +1,9 @@
 package cutoff;
 
+// Insertion sort cho Comparable[].
+// Phien ban dai [lo..hi]: slide 2.1 "Insertion sort implementation" (21ElementarySorts.pdf, tr.26)
+// duoc goi tu Merge.sort khi mang con nho.
+// less() / exch(): slide 2.1 tr.27 (dung Comparable thay vi Comparator).
 public class Insertion
 {
     public static boolean count = false;

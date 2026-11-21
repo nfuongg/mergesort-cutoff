@@ -1,5 +1,13 @@
 package cutoff;
 
+// Mergesort voi cai tien CUTOFF chuyen sang Insertion sort cho mang con nho.
+// merge(): slide 2.2 "Merging: Java implementation" (22Mergesort.pdf, tr.7)
+// sort():  slide 2.2 "Mergesort: practical improvements" (tr.18)
+//
+// public static:
+//   CUTOFF   - duoc Harness gan truc tiep truoc moi run
+//   count    - khi true, less() dem vao `compares` (dung cho mode counting)
+//   compares - tich luy so phep so sanh trong lan sort hien tai
 public class Merge
 {
     public static int CUTOFF = 10;
@@ -23,6 +31,8 @@ public class Merge
 
     private static void sort(Comparable[] a, Comparable[] aux, int lo, int hi)
     {
+        // Dieu kien cat cho Insertion: mang con co hi - lo + 1 <= CUTOFF phan tu.
+        // CUTOFF = 1 tuong duong khong cat (moi la 1 phan tu).
         if (hi <= lo + CUTOFF - 1)
         {
             Insertion.sort(a, lo, hi);

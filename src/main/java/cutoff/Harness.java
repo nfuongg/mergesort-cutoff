@@ -103,12 +103,15 @@ public class Harness {
                 Merge.compares = 0; Insertion.compares = 0;
             }
             Integer[] base = DataGen.gen(dist, N, seed);
+            long fpBefore = Verify.multisetFingerprint(base);
             Integer[] a = base.clone();
             long t1 = System.nanoTime();
             Merge.sort(a);
             long t2 = System.nanoTime();
             rs.nanos = t2 - t1;
             Verify.checkSorted(a);
+            if (Verify.multisetFingerprint(a) != fpBefore)
+                throw new AssertionError("Multiset changed (Comparable, N=" + N + ", cutoff=" + cutoffVal + ")");
             rs.checksum = Verify.checksum(a);
             if (counting) {
                 rs.compares = Merge.compares + Insertion.compares;
@@ -121,12 +124,15 @@ public class Harness {
                 MergeInt.compares = 0; InsertionInt.compares = 0;
             }
             int[] base = DataGen.genInt(dist, N, seed);
+            long fpBefore = Verify.multisetFingerprint(base);
             int[] a = base.clone();
             long t1 = System.nanoTime();
             MergeInt.sort(a);
             long t2 = System.nanoTime();
             rs.nanos = t2 - t1;
             Verify.checkSorted(a);
+            if (Verify.multisetFingerprint(a) != fpBefore)
+                throw new AssertionError("Multiset changed (int, N=" + N + ", cutoff=" + cutoffVal + ")");
             rs.checksum = Verify.checksum(a);
             if (counting) {
                 rs.compares = MergeInt.compares + InsertionInt.compares;

@@ -45,10 +45,8 @@ mergesort-cutoff/
 │   ├── raw/                    # CSV thô từng lần chạy
 │   ├── summary/                # CSV tổng hợp
 │   └── plots/                  # PNG đồ thị
-├── report/
-│   └── report.md               # báo cáo
-└── docs/
-    └── ai-usage.md             # ghi chú AI làm gì, SV làm gì
+└── report/
+    └── report.md               # báo cáo
 ```
 
 ## Cách chạy lại (tóm tắt)

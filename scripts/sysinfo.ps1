@@ -1,4 +1,3 @@
-
 $ErrorActionPreference = "Continue"
 $out = "results\sysinfo.txt"
 New-Item -ItemType Directory -Force -Path "results" | Out-Null
@@ -33,15 +32,25 @@ Section "Java"
 cmd /c "java -version 2>&1"  | Out-File -FilePath $out -Append -Encoding utf8
 cmd /c "javac -version 2>&1" | Out-File -FilePath $out -Append -Encoding utf8
 
-Section "Measurement checklist"
-@"
-[ ] Laptop plugged in
-[ ] Power plan = High performance (powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c)
-[ ] Browser / IDE / background apps closed
-[ ] Windows Defender real-time scan paused (optional)
-[ ] Processor power management: Maximum state as desired (Turbo on/off noted)
-[ ] CPU temperature < 60 C at start (if sensor available)
-[ ] Java pinned to P-cores via: start /b /affinity FF /wait java ...
-"@ | Out-File -FilePath $out -Append -Encoding utf8
+Section "Measurement state (auto-checked)"
+$plan = (powercfg /GETACTIVESCHEME) -join ""
+$isHigh = $plan -match "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
+$batt = Get-CimInstance Win32_Battery -ErrorAction SilentlyContinue
+$onAC = if ($batt) { $batt.BatteryStatus -eq 2 } else { $true }
+$heavy = Get-Process -ErrorAction SilentlyContinue | Where-Object {
+    $_.Name -in @("chrome","msedge","firefox","Teams","ms-teams","Zoom","Slack","Spotify","Code","idea64")
+} | Select-Object -ExpandProperty Name -Unique
+
+$mark = { param($ok) if ($ok) { "[x]" } else { "[ ]" } }
+"$(& $mark $isHigh) Power plan = High performance"       | Out-File -FilePath $out -Append -Encoding utf8
+"$(& $mark $onAC) Laptop plugged in (AC power)"          | Out-File -FilePath $out -Append -Encoding utf8
+"$(& $mark (-not $heavy)) No heavy apps running"         | Out-File -FilePath $out -Append -Encoding utf8
+if ($heavy) {
+    "    (detected: $($heavy -join ', '))" | Out-File -FilePath $out -Append -Encoding utf8
+}
+"[-] Windows Defender real-time scan (user decides)"     | Out-File -FilePath $out -Append -Encoding utf8
+"[-] Turbo state / Max processor power (user decides)"   | Out-File -FilePath $out -Append -Encoding utf8
+"[-] CPU temperature (no reliable sensor API)"           | Out-File -FilePath $out -Append -Encoding utf8
+"[-] P-core pinning (done inside run_full via start /affinity FF)" | Out-File -FilePath $out -Append -Encoding utf8
 
 Write-Host "Written: $out" -ForegroundColor Green

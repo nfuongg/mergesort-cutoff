@@ -24,4 +24,16 @@ public final class Verify {
     public static long checksum(int[] a) {
         return Arrays.hashCode(a);
     }
+
+    public static long multisetFingerprint(int[] a) {
+        long h = 0;
+        for (int x : a) h += (long) x;
+        return h;
+    }
+
+    public static long multisetFingerprint(Integer[] a) {
+        long h = 0;
+        for (Integer x : a) h += (long) x;
+        return h;
+    }
 }

@@ -329,19 +329,82 @@ def analyze_counts(counts):
     return df
 
 
+def check_checksum_consistency(df):
+    """Voi moi (type, N, dist, rep): checksum phai dong nhat qua tat ca cutoff.
+       Neu khac nhau nghia la co cutoff sort sai (tao ra hoan vi khac)."""
+    bad = []
+    for (typ, N, dist, rep), g in df.groupby(["type", "N", "dist", "rep"]):
+        if g["checksum"].nunique() > 1:
+            bad.append((typ, N, dist, rep))
+    if bad:
+        print(f"CANH BAO: checksum khong nhat quan o {len(bad)} cell:")
+        for b in bad[:5]:
+            print(f"  {b}")
+        return False
+    print("OK: checksum nhat quan qua moi cutoff (sort dung + bao toan phan tu)")
+    return True
+
+
+def quantization_bins(counts):
+    """Voi moi (type, N, dist): nhom CUTOFF cho cung so compare = cung 'bin'.
+       Chi ra viec 'best_cutoff' nhay chi la nhieu giua cac bin tuong duong."""
+    if counts is None:
+        return None
+    rows = []
+    for (typ, N, dist), g in counts.groupby(["type", "N", "dist"]):
+        g = g.sort_values("cutoff")
+        bins = {}
+        for _, r in g.iterrows():
+            bins.setdefault(int(r["compares"]), []).append(int(r["cutoff"]))
+        for cmp, cs in sorted(bins.items()):
+            rows.append({
+                "type": typ, "N": N, "dist": dist,
+                "compares": cmp,
+                "cutoff_bin": ",".join(str(x) for x in sorted(cs)),
+                "bin_size": len(cs),
+            })
+    df = pd.DataFrame(rows)
+    df.to_csv(os.path.join(SUM_DIR, "quantization.csv"), index=False)
+    return df
+
+
+def power_law_fit_restricted(summary, cutoff=10, N_min=200_000):
+    """Fit chi tren N >= N_min de loai anomaly o N nho."""
+    rows = []
+    sub = summary[(summary.cutoff == cutoff) & (summary.N >= N_min)].copy()
+    for (typ, dist), g in sub.groupby(["type", "dist"]):
+        g = g.sort_values("N")
+        if len(g) < 3:
+            continue
+        logN = np.log10(g["N"].values.astype(float))
+        logT = np.log10(g["median"].values / 1e6)
+        b, loga = np.polyfit(logN, logT, 1)
+        rows.append({
+            "type": typ, "dist": dist, "cutoff": cutoff,
+            "N_min": N_min,
+            "b_exponent": float(b),
+            "n_points": len(g),
+        })
+    df = pd.DataFrame(rows)
+    df.to_csv(os.path.join(SUM_DIR, "power_law_restricted.csv"), index=False)
+    return df
+
+
 def main():
     df = load_full()
 
     reps_cells = df.groupby(["type", "N", "dist", "cutoff"]).size()
     print(f"Reps/cell: min={reps_cells.min()}, max={reps_cells.max()}")
     if reps_cells.nunique() != 1:
-        print("CANH BAO: so rep/cell khong deu, kiem tra lai file dau vao")
+        print("CANH BAO: so rep/cell khong deu")
+    check_checksum_consistency(df)
 
     summary   = summarize(df)
     best      = best_cutoff_and_region(summary)
     cmp       = comparison_table(summary)
     doub      = doubling_table(summary, ref_cutoff=10)
     power     = power_law_fit(summary, cutoff=10)
+    power_r   = power_law_fit_restricted(summary, cutoff=10, N_min=200_000)
 
     plot_time_vs_cutoff(summary)
     plot_normalized(summary, ref_cutoff=7)
@@ -351,6 +414,7 @@ def main():
 
     counts = load_counts()
     analyze_counts(counts)
+    bins = quantization_bins(counts)
 
     print("\n=== comparison.csv (N >= 100k) ===")
     print(cmp.round(3).to_string(index=False))
@@ -358,8 +422,14 @@ def main():
     print(best.to_string(index=False))
     print("\n=== doubling.csv (cap N dung gap doi, ref_cutoff=10) ===")
     print(doub.round(3).to_string(index=False))
-    print("\n=== power_law.csv (fit T = a * N^b, cutoff=10) ===")
+    print("\n=== power_law.csv (fit tren ALL N, cutoff=10) ===")
     print(power.round(4).to_string(index=False))
+    print("\n=== power_law_restricted.csv (fit tren N >= 200k, cutoff=10) ===")
+    print(power_r.round(4).to_string(index=False))
+    if bins is not None:
+        print("\n=== quantization.csv (N=1M, random) - cac CUTOFF cung bin ===")
+        b1m = bins[(bins.N == 1_000_000) & (bins.dist == "random")]
+        print(b1m.to_string(index=False))
 
 
 if __name__ == "__main__":

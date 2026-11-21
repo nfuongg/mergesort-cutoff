@@ -1,5 +1,6 @@
 package cutoff;
 
+// Ban int[] cua Insertion.java: less(v, w) -> v < w thay vi v.compareTo(w) < 0.
 public class InsertionInt
 {
     public static boolean count = false;

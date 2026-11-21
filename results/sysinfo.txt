@@ -1,5 +1,5 @@
 ﻿Mergesort CUTOFF experiment - system info
-Collected: 2026-11-21 10:51:59 +07:00
+Collected: 2026-11-21 12:57:29 +07:00
 
 === OS ===
 
@@ -39,11 +39,12 @@ Java(TM) SE Runtime Environment (build 25.0.2+10-LTS-69)
 Java HotSpot(TM) 64-Bit Server VM (build 25.0.2+10-LTS-69, mixed mode, sharing)
 javac 25.0.2
 
-=== Measurement checklist ===
-[ ] Laptop plugged in
-[ ] Power plan = High performance (powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c)
-[ ] Browser / IDE / background apps closed
-[ ] Windows Defender real-time scan paused (optional)
-[ ] Processor power management: Maximum state as desired (Turbo on/off noted)
-[ ] CPU temperature < 60 C at start (if sensor available)
-[ ] Java pinned to P-cores via: start /b /affinity FF /wait java ...
+=== Measurement state (auto-checked) ===
+[x] Power plan = High performance
+[x] Laptop plugged in (AC power)
+[ ] No heavy apps running
+    (detected: chrome, Code, ms-teams, Zoom)
+[-] Windows Defender real-time scan (user decides)
+[-] Turbo state / Max processor power (user decides)
+[-] CPU temperature (no reliable sensor API)
+[-] P-core pinning (done inside run_full via start /affinity FF)
