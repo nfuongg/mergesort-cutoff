@@ -8,7 +8,7 @@ Giáo trình nhắc đến CUTOFF = 7 (cũ) và 10 (mới). Thí nghiệm này �
 
 ## Cấu hình thí nghiệm
 
-- **Ngôn ngữ**: Java 25.
+- **Ngôn ngữ**: Java 25 (JDK thuần, không dùng thư viện algs4).
 - **Máy đo**: Laptop ASUS Vivobook 16X K3605VC, Intel Core i5-13420H (4 P-core + 4 E-core, 12 luồng), 16 GB RAM, Windows 11 Home.
 - **Quy ước đo**: ghim affinity vào 4 P-core, heap cố định `-Xms2g -Xmx2g -XX:+AlwaysPreTouch`, khởi động JIT trước khi đo, mỗi cấu hình lặp >= 30 lần, báo trung vị + độ lệch chuẩn + CI 95%.
 - **Biến khảo sát**:
@@ -25,10 +25,10 @@ mergesort-cutoff/
 ├── .gitignore
 ├── LICENSE
 ├── src/main/java/cutoff/
-│   ├── Merge.java              # mergesort Comparable[] có CUTOFF
-│   ├── Insertion.java          # insertion sort trên [lo, hi]
-│   ├── MergeInt.java           # mergesort int[] có CUTOFF
-│   ├── InsertionInt.java       # insertion sort int[] trên [lo, hi]
+│   ├── Merge.java              # SV viết: mergesort Comparable[] có CUTOFF
+│   ├── Insertion.java          # SV viết: insertion sort trên [lo, hi]
+│   ├── MergeInt.java           # SV viết: mergesort int[] có CUTOFF
+│   ├── InsertionInt.java       # SV viết: insertion sort int[] trên [lo, hi]
 │   ├── DataGen.java            # sinh dữ liệu theo seed, nhiều phân bố
 │   ├── Verify.java             # kiểm sắp xếp + so sánh multiset
 │   └── Harness.java            # khung đo thời gian, in CSV
@@ -45,9 +45,10 @@ mergesort-cutoff/
 │   ├── raw/                    # CSV thô từng lần chạy
 │   ├── summary/                # CSV tổng hợp
 │   └── plots/                  # PNG đồ thị
-└── report/
-    └── report.md               # báo cáo
-
+├── report/
+│   └── report.md               # báo cáo
+└── docs/
+    └── ai-usage.md             # ghi chú AI làm gì, SV làm gì
 ```
 
 ## Cách chạy lại (tóm tắt)
@@ -69,7 +70,4 @@ powershell -File scripts\run_full.ps1
 python scripts\analyze.py
 ```
 
-## Kết quả
-
-Báo cáo đầy đủ: [report/report.md](report/report.md)
-Đồ thị tổng hợp: [results/plots/headline.png](results/plots/headline.png)
+Chi tiết các thí nghiệm, cấu hình đo và kết quả xem trong `report/report.md`.

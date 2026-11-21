@@ -2,6 +2,9 @@ package cutoff;
 
 public class Insertion
 {
+    public static boolean count = false;
+    public static long compares = 0;
+
     public static void sort(Comparable[] a)
     {
         int N = a.length;
@@ -18,7 +21,10 @@ public class Insertion
     }
 
     private static boolean less(Comparable v, Comparable w)
-    {  return v.compareTo(w) < 0;  }
+    {
+        if (count) compares++;
+        return v.compareTo(w) < 0;
+    }
 
     private static void exch(Comparable[] a, int i, int j)
     {  Comparable swap = a[i]; a[i] = a[j]; a[j] = swap;  }

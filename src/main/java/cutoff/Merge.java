@@ -2,8 +2,9 @@ package cutoff;
 
 public class Merge
 {
-
     public static int CUTOFF = 10;
+    public static boolean count = false;
+    public static long compares = 0;
 
     private static void merge(Comparable[] a, Comparable[] aux, int lo, int mid, int hi)
     {
@@ -28,8 +29,8 @@ public class Merge
             return;
         }
         int mid = lo + (hi - lo) / 2;
-        sort (a, aux, lo, mid);
-        sort (a, aux, mid+1, hi);
+        sort(a, aux, lo, mid);
+        sort(a, aux, mid+1, hi);
         merge(a, aux, lo, mid, hi);
     }
 
@@ -40,5 +41,8 @@ public class Merge
     }
 
     private static boolean less(Comparable v, Comparable w)
-    {  return v.compareTo(w) < 0;  }
+    {
+        if (count) compares++;
+        return v.compareTo(w) < 0;
+    }
 }

@@ -24,9 +24,8 @@ __pycache__/
 .venv/
 venv/
 
-# Thí nghiệm - dữ liệu lớn (regen bằng DataGen + seed)
+# Thí nghiệm - dữ liệu sinh ra khi chạy DataGen main (regen được từ seed)
 data/
-results/raw/
 
 # Log tạm
 *.log

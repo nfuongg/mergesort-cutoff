@@ -30,8 +30,8 @@ Section "Power plan"
 powercfg /GETACTIVESCHEME | Out-File -FilePath $out -Append -Encoding utf8
 
 Section "Java"
-(java -version 2>&1) | Out-String | Out-File -FilePath $out -Append -Encoding utf8
-(javac -version 2>&1) | Out-String | Out-File -FilePath $out -Append -Encoding utf8
+cmd /c "java -version 2>&1"  | Out-File -FilePath $out -Append -Encoding utf8
+cmd /c "javac -version 2>&1" | Out-File -FilePath $out -Append -Encoding utf8
 
 Section "Measurement checklist"
 @"
